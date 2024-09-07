@@ -11,7 +11,6 @@ var was_wall_normal = Vector2.ZERO
 
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-# 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var coyote_timer: Timer = $CoyoteTimer
