@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://crtka4os18xlg"]
+
+[ext_resource type="PackedScene" uid="uid://c3pgi74ehr7qr" path="res://scenes/menu.tscn" id="1_xyj8l"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Menu" parent="." instance=ExtResource("1_xyj8l")]
+offset_left = 570.0
+offset_top = 377.0
+offset_right = 570.0
+offset_bottom = 377.0
+
+[node name="Camera2D" type="Camera2D" parent="Menu"]
