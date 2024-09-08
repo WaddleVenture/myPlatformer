@@ -17,7 +17,7 @@ config/icon="res://oui.PNG"
 
 [autoload]
 
-PlayerPowers="*res://scripts/PlayerPowers.gd"
+PlayerPowers="*res://datas/PlayerPowers.gd"
 
 [display]
 

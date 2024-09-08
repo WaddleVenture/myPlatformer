@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://8b0rpnvd1r04"]
 
 [ext_resource type="Texture2D" uid="uid://bf8bhwsfcgwn6" path="res://assets/sprites/fruit.png" id="1_g5ll3"]
-[ext_resource type="Script" path="res://scripts/wall_jump_fruit.gd" id="1_i8rjw"]
+[ext_resource type="Script" path="res://scripts/power_up_fruit.gd" id="1_i8rjw"]
 [ext_resource type="AudioStream" uid="uid://cd5xv7xy14f64" path="res://assets/sounds/power_up.wav" id="3_xi43t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mm5cy"]
