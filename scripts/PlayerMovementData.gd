@@ -2,6 +2,7 @@ class_name PlayerMovementData
 
 extends Resource
 
+# Movement
 @export var speed = 130.0
 @export var jump_velocity = -300.0
 @export var roll_speed = 150.0

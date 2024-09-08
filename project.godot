@@ -15,6 +15,10 @@ run/main_scene="res://scenes/game.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://oui.PNG"
 
+[autoload]
+
+PlayerPowers="*res://scripts/PlayerPowers.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"
