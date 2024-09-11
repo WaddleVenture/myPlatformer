@@ -3,8 +3,10 @@ extends Control
 @onready var continue_button: Button = $VBoxContainer/ContinueButton
 
 func _ready() -> void:
-	$VBoxContainer/StartButton.grab_focus()
-	check_save_file()
+	if check_save_file():
+		$VBoxContainer/ContinueButton.grab_focus()
+	else: 
+		$VBoxContainer/StartButton.grab_focus()
 	
 
 func _on_start_button_pressed() -> void:
@@ -18,13 +20,15 @@ func _on_quit_button_pressed() -> void:
 	
 
 # Check if a save file exists
-func check_save_file() -> void:
+func check_save_file() -> bool:
 	if FileAccess.file_exists(SaveManager.save_path):
 		continue_button.disabled = false
 		continue_button.modulate = Color(1, 1, 1, 1)
+		return true
 	else:
 		continue_button.disabled = true
 		continue_button.modulate = Color(1, 1, 1, 0.8)
+		return false
 
 
 func _on_continue_button_pressed() -> void:
