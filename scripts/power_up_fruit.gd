@@ -21,15 +21,15 @@ func elevated_animation():
 
 func _on_body_entered(_body: Node2D) -> void:
 	animation_player.play("power_up_animation")
-	unlock_power(power_to_unlock)
+	unlock_power_temp(power_to_unlock)
 	
 
-# Function to unlock the power
-func unlock_power(power: Power) -> void:
+# Débloque temporairement le pouvoir
+func unlock_power_temp(power: Power) -> void:
 	match power:
 		Power.WALL_JUMP:
-			PlayerPowers.unlock_wall_jump()
+			PlayerPowers.unlock_wall_jump_temp()
 		Power.DOUBLE_JUMP:
-			PlayerPowers.unlock_double_jump()
+			PlayerPowers.unlock_double_jump_temp()
 		_:
 			print("Unknown power: " + str(power))

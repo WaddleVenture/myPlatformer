@@ -21,9 +21,8 @@ var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 func death() -> void:
 	is_alive = false
 	velocity = Vector2.ZERO 
-	PlayerPowers.reset_temporary_powers()
 	animated_sprite.play("death")
-	
+	PlayerPowers.reset_temp_powers()
 
 
 func start_roll() -> void:
@@ -58,7 +57,7 @@ func handle_jump() -> void:
 		jump_buffer_timer.stop()
 	
 	# Double jump
-	elif not is_on_floor() and PlayerPowers.can_double_jump:
+	elif not is_on_floor() and (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
 		if Input.is_action_just_pressed("jump") and air_jump and not just_wall_jumped:
 			velocity.y = movement_data.jump_velocity * 0.8
 			jump_sound.play()
@@ -70,7 +69,7 @@ func handle_jump() -> void:
 
 # Handle wall jump
 func handle_wall_jump() -> void:
-	if PlayerPowers.can_wall_jump : 
+	if PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 
 		if not is_on_wall_only() and wall_jump_timer.time_left <= 0.0 : return
 		var wall_normal = get_wall_normal()
 		if wall_jump_timer.time_left > 0.0: 
