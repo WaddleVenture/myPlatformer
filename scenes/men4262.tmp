@@ -1,0 +1,131 @@
+[gd_scene load_steps=10 format=3 uid="uid://c3pgi74ehr7qr"]
+
+[ext_resource type="FontFile" uid="uid://d3jq5low7qf5j" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="1_nqoy0"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_qypen"]
+[ext_resource type="FontFile" uid="uid://chvboddrnqevi" path="res://assets/fonts/PixelOperator8.ttf" id="2_uioxm"]
+[ext_resource type="AudioStream" uid="uid://dxmc5utr2q7ni" path="res://assets/music/SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com (mp3cut.net).mp3" id="4_iq7qw"]
+[ext_resource type="Texture2D" uid="uid://c8jy4on2vmxn0" path="res://assets/background/sky.png" id="5_2o2g0"]
+[ext_resource type="Script" path="res://scripts/parallax_background.gd" id="5_r8vw2"]
+[ext_resource type="Texture2D" uid="uid://snryo30pssl1" path="res://assets/background/mountains.png" id="6_i5tet"]
+[ext_resource type="Texture2D" uid="uid://dghqa3ya5iylb" path="res://assets/background/far-clouds.png" id="6_q27t2"]
+[ext_resource type="Texture2D" uid="uid://bmuj4v2tgd01s" path="res://assets/background/far-mountains.png" id="7_vgmjj"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qypen")
+
+[node name="Message" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -271.0
+offset_top = -224.0
+offset_right = 271.0
+offset_bottom = -93.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_nqoy0")
+theme_override_font_sizes/font_size = 64
+text = "Meh main menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -114.5
+offset_top = 76.0
+offset_right = 114.5
+offset_bottom = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_uioxm")
+text = "Continue"
+
+[node name="Separator2" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_uioxm")
+text = "Start"
+
+[node name="Separator" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_uioxm")
+text = "Quit"
+
+[node name="MenuMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_iq7qw")
+volume_db = 11.244
+autoplay = true
+bus = &"Music"
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Background"]
+script = ExtResource("5_r8vw2")
+
+[node name="Sky" type="ParallaxLayer" parent="Background/ParallaxBackground"]
+motion_scale = Vector2(0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxBackground/Sky"]
+texture_filter = 1
+scale = Vector2(3.60833, 3.60833)
+texture = ExtResource("5_2o2g0")
+centered = false
+
+[node name="FarClouds" type="ParallaxLayer" parent="Background/ParallaxBackground"]
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(1152, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxBackground/FarClouds"]
+position = Vector2(0, -245)
+scale = Vector2(8.99219, 8.99219)
+texture = ExtResource("6_q27t2")
+centered = false
+
+[node name="FarMountains" type="ParallaxLayer" parent="Background/ParallaxBackground"]
+motion_scale = Vector2(0.8, 0)
+motion_mirroring = Vector2(1152, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxBackground/FarMountains"]
+position = Vector2(5, -387)
+scale = Vector2(7.15625, 7.15625)
+texture = ExtResource("7_vgmjj")
+centered = false
+
+[node name="Mountains" type="ParallaxLayer" parent="Background/ParallaxBackground"]
+motion_scale = Vector2(1, 0)
+motion_mirroring = Vector2(1152, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxBackground/Mountains"]
+texture_filter = 1
+position = Vector2(-4, 24)
+scale = Vector2(3.6, 3.6)
+texture = ExtResource("6_i5tet")
+centered = false
+
+[connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

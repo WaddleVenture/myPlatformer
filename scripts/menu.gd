@@ -29,8 +29,10 @@ func check_save_file() -> void:
 
 func _on_continue_button_pressed() -> void:
 	var save_data = SaveManager.load_game()
-	if save_data.has("level"):
-		var level_path = "res://levels/level_%d.tscn" % save_data["level"]
+	
+	if save_data and save_data.level >= 0:
+		var level_path = "res://levels/level_%d.tscn" % save_data.level
 		get_tree().change_scene_to_file(level_path)
 	else:
 		print("No valid save data found.")
+		
