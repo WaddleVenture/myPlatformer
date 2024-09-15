@@ -2,7 +2,7 @@ extends Area2D
 
 const FILE_BEGIN = "levels/level_"
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_body_entered(_body: Node2D) -> void:
 	
 	# Get current scene file path
 	var current_scene_file = get_tree().current_scene.scene_file_path

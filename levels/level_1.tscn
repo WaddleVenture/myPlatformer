@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=4 uid="uid://brtqktkp4rnkn"]
+[gd_scene load_steps=18 format=4 uid="uid://brtqktkp4rnkn"]
 
 [ext_resource type="Script" path="res://scripts/level_manager.gd" id="1_noou0"]
 [ext_resource type="FontFile" uid="uid://d3jq5low7qf5j" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_q20ou"]
 [ext_resource type="PackedScene" uid="uid://cq0gonfovkxk5" path="res://scenes/player.tscn" id="3_855s2"]
+[ext_resource type="PackedScene" uid="uid://xjt14vl0u6tq" path="res://scenes/portal.tscn" id="3_k08hw"]
 [ext_resource type="Texture2D" uid="uid://cvd2sy136du8s" path="res://assets/sprites/world_tileset.png" id="4_ps2bx"]
 [ext_resource type="PackedScene" uid="uid://ddyde7mjpubp2" path="res://scenes/killzone.tscn" id="5_4nwb8"]
 [ext_resource type="PackedScene" uid="uid://dhhny5sokx5ue" path="res://scenes/coin.tscn" id="6_4x0ju"]
@@ -244,6 +245,9 @@ text = "You collected X coins"
 horizontal_alignment = 1
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
+
+[node name="Portal" parent="LevelManager" instance=ExtResource("3_k08hw")]
+position = Vector2(584, -123)
 
 [node name="Player" parent="." instance=ExtResource("3_855s2")]
 position = Vector2(59, 45)
