@@ -19,6 +19,7 @@ config/icon="res://oui.PNG"
 
 PlayerPowers="*res://datas/PlayerPowers.gd"
 SaveManager="*res://datas/SaveManager.gd"
+LevelTransition="*res://scenes/level_transition.tscn"
 
 [display]
 

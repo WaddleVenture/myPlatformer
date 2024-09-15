@@ -4,6 +4,10 @@ const FILE_BEGIN = "levels/level_"
 
 func _on_body_entered(_body: Node2D) -> void:
 	
+	get_tree().paused = true
+	
+	await LevelTransition.fade_to_black()
+	
 	# Get current scene file path
 	var current_scene_file = get_tree().current_scene.scene_file_path
 	
@@ -21,3 +25,9 @@ func _on_body_entered(_body: Node2D) -> void:
 	
 	# Go to next level
 	get_tree().change_scene_to_file.bind(next_level_path).call_deferred()
+	
+	get_tree().paused = false
+	
+	await LevelTransition.fade_from_black()
+	
+	
