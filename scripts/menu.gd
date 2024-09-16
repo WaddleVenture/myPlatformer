@@ -12,7 +12,9 @@ func _ready() -> void:
 func _on_start_button_pressed() -> void:
 	PlayerPowers.reset_powers()
 	SaveManager.reset_save()
+	await LevelTransition.fade_to_black()
 	get_tree().change_scene_to_file("res://levels/level_0.tscn")
+	await LevelTransition.fade_from_black()
 
 
 func _on_quit_button_pressed() -> void:
@@ -34,9 +36,12 @@ func check_save_file() -> bool:
 func _on_continue_button_pressed() -> void:
 	var save_data = SaveManager.load_game()
 	
+	
 	if save_data and save_data.level >= 0:
+		await LevelTransition.fade_to_black()
 		var level_path = "res://levels/level_%d.tscn" % save_data.level
 		get_tree().change_scene_to_file(level_path)
+		await LevelTransition.fade_from_black()
 	else:
 		print("No valid save data found.")
 		
