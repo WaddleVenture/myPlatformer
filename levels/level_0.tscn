@@ -270,6 +270,9 @@ shape = SubResource("WorldBoundaryShape2D_jp6ab")
 [node name="Coin" parent="Coins" instance=ExtResource("4_su85y")]
 position = Vector2(119, 56)
 
+[node name="Coin15" parent="Coins" instance=ExtResource("4_su85y")]
+position = Vector2(125, 56)
+
 [node name="Coin2" parent="Coins" instance=ExtResource("4_su85y")]
 position = Vector2(215, 56)
 
@@ -327,9 +330,6 @@ tile_set = SubResource("TileSet_40vkf")
 
 [node name="Platform" parent="Platforms" instance=ExtResource("5_qxsja")]
 position = Vector2(85, 14)
-
-[node name="Platform3" parent="Platforms" instance=ExtResource("5_qxsja")]
-position = Vector2(386, -52)
 
 [node name="Platform2" parent="Platforms" instance=ExtResource("5_qxsja")]
 position = Vector2(431, 37)
@@ -432,9 +432,6 @@ power_to_unlock = 1
 
 [node name="Ladders" type="Node" parent="."]
 
-[node name="Ladder" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(377, -34)
-
 [node name="Ladder2" parent="Ladders" instance=ExtResource("13_ko277")]
 position = Vector2(415, -129)
 
@@ -445,15 +442,6 @@ position = Vector2(415, -99)
 position = Vector2(373, -104)
 
 [node name="Ladder4" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(415, -69)
-
-[node name="Ladder6" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(415, -129)
-
-[node name="Ladder7" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(415, -99)
-
-[node name="Ladder8" parent="Ladders" instance=ExtResource("13_ko277")]
 position = Vector2(415, -69)
 
 [node name="Ladder9" parent="Ladders" instance=ExtResource("13_ko277")]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctxbhfcwbu3mr"]
+[gd_scene load_steps=5 format=3 uid="uid://ctxbhfcwbu3mr"]
 
 [ext_resource type="Texture2D" uid="uid://dr3scp1byx8y3" path="res://assets/sprites/ladders.png" id="1_dngfk"]
 [ext_resource type="Script" path="res://scripts/ladder.gd" id="1_h1dvc"]
@@ -6,7 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hyboa"]
 size = Vector2(12, 30)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7bqxd"]
+size = Vector2(12, 1.5)
+
 [node name="Ladder" type="Area2D"]
+collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_h1dvc")
 
@@ -18,5 +22,19 @@ region_rect = Rect2(4, 18, 12, 30)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_hyboa")
 
+[node name="RayCastUp" type="RayCast2D" parent="."]
+target_position = Vector2(0, -22)
+collision_mask = 8
+collide_with_areas = true
+
+[node name="TopLadder" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopLadder"]
+position = Vector2(0, -15.25)
+shape = SubResource("RectangleShape2D_7bqxd")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="body_entered" from="TopLadder" to="." method="_on_top_ladder_body_entered"]
+[connection signal="body_exited" from="TopLadder" to="." method="_on_top_ladder_body_exited"]

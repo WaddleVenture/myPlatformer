@@ -12,6 +12,7 @@ var on_ladder: Area2D = null
 var ladder_count: int = 0
 var is_climbing: bool = false 
 var was_climbing: bool = false
+var is_on_top_of_ladder: bool = false
 
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -20,6 +21,7 @@ var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var wall_jump_timer: Timer = $WallJumpTimer
+
 
 
 func death() -> void:
@@ -37,7 +39,7 @@ func start_roll() -> void:
 
 # Handle vertical movement while on the ladder
 func climb_ladder() -> void:
-	if Input.is_action_pressed("move_up"):
+	if Input.is_action_pressed("move_up") and not is_on_top_of_ladder:
 		velocity.y = -movement_data.speed
 	elif Input.is_action_pressed("move_down"):
 		velocity.y = movement_data.speed
@@ -55,15 +57,6 @@ func remove_ladder_count(_ladder: Area2D) -> void:
 		ladder_count -= 1
 	if ladder_count == 0:
 		on_ladder = null
-
-
-#func apply_gravity(delta: float) -> void:
-	#if is_climbing and ladder_count > 0:
-		#climb_ladder()
-	#elif not is_on_floor():
-		#velocity.y += gravity * delta
-		
-
 
 func apply_gravity(delta: float) -> void:
 	if (is_climbing or was_climbing) and ladder_count > 0:
@@ -207,7 +200,8 @@ func _physics_process(delta: float) -> void:
 	if (is_climbing or was_climbing) and ladder_count > 0:
 		climb_ladder()
 	
-	if ladder_count == 0:
+	
+	if ladder_count == 0 and not is_on_top_of_ladder:
 		was_climbing = false
 
 
