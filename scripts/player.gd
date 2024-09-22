@@ -206,6 +206,9 @@ func _physics_process(delta: float) -> void:
 
 	if (is_climbing or was_climbing) and ladder_count > 0:
 		climb_ladder()
+	
+	if ladder_count == 0:
+		was_climbing = false
 
 
 	# Storing the wall normal

@@ -436,13 +436,40 @@ power_to_unlock = 1
 position = Vector2(377, -34)
 
 [node name="Ladder2" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(408, -43)
+position = Vector2(415, -129)
 
 [node name="Ladder3" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(408, -13)
+position = Vector2(415, -99)
 
 [node name="Ladder5" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(436, -25)
+position = Vector2(373, -104)
 
 [node name="Ladder4" parent="Ladders" instance=ExtResource("13_ko277")]
-position = Vector2(408, 17)
+position = Vector2(415, -69)
+
+[node name="Ladder6" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(415, -129)
+
+[node name="Ladder7" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(415, -99)
+
+[node name="Ladder8" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(415, -69)
+
+[node name="Ladder9" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(326, -147)
+
+[node name="Ladder10" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(326, -117)
+
+[node name="Ladder11" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(326, -83)
+
+[node name="Ladder12" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(275, -161)
+
+[node name="Ladder13" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(275, -131)
+
+[node name="Ladder14" parent="Ladders" instance=ExtResource("13_ko277")]
+position = Vector2(275, -101)
