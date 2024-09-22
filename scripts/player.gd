@@ -64,6 +64,7 @@ func remove_ladder_count(_ladder: Area2D) -> void:
 		#velocity.y += gravity * delta
 		
 
+
 func apply_gravity(delta: float) -> void:
 	if (is_climbing or was_climbing) and ladder_count > 0:
 		return
