@@ -8,6 +8,10 @@ var was_on_air: bool = false
 var air_jump: bool = false
 var just_wall_jumped: bool = false
 var was_wall_normal = Vector2.ZERO
+var on_ladder: Area2D = null
+var ladder_count: int = 0
+var is_climbing: bool = false 
+var was_climbing: bool = false
 
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -31,9 +35,42 @@ func start_roll() -> void:
 		animated_sprite.play("roll")
 
 
+# Handle vertical movement while on the ladder
+func climb_ladder() -> void:
+	if Input.is_action_pressed("move_up"):
+		velocity.y = -movement_data.speed
+	elif Input.is_action_pressed("move_down"):
+		velocity.y = movement_data.speed
+	else:
+		velocity.y = 0
+	was_climbing = true
+
+
+func add_ladder_count(ladder: Area2D) -> void:
+	ladder_count += 1
+	on_ladder = ladder
+
+func remove_ladder_count(_ladder: Area2D) -> void:
+	if ladder_count > 0:
+		ladder_count -= 1
+	if ladder_count == 0:
+		on_ladder = null
+
+
+#func apply_gravity(delta: float) -> void:
+	#if is_climbing and ladder_count > 0:
+		#climb_ladder()
+	#elif not is_on_floor():
+		#velocity.y += gravity * delta
+		
+
 func apply_gravity(delta: float) -> void:
-	if not is_on_floor():
-		velocity.y += gravity * delta
+	if (is_climbing or was_climbing) and ladder_count > 0:
+		return
+	else:
+		if not is_on_floor():
+			velocity.y += gravity * delta
+
 
 
 func apply_air_resistance(direction, delta: float) -> void:
@@ -47,6 +84,16 @@ func handle_drop() -> void:
 
 
 func handle_jump() -> void:
+
+	# Handle jump for ladder
+	if (is_climbing or was_climbing) and ladder_count > 0:
+		if Input.is_action_just_pressed("jump"):
+			on_ladder = null
+			velocity.y = movement_data.jump_velocity 
+			jump_sound.play()
+			was_climbing = false
+			return
+
 	if is_on_floor(): 
 		air_jump = true
 
@@ -154,6 +201,12 @@ func _physics_process(delta: float) -> void:
 	var was_on_floor = is_on_floor()
 	var was_on_wall = is_on_wall_only()
 	
+	is_climbing = on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))
+
+	if (is_climbing or was_climbing) and ladder_count > 0:
+		climb_ladder()
+
+
 	# Storing the wall normal
 	if was_on_wall:
 		was_wall_normal = get_wall_normal()
@@ -177,6 +230,7 @@ func _physics_process(delta: float) -> void:
 
 
 	handle_squash_and_stretch()
+	
 	apply_gravity(delta)
 	handle_wall_jump()
 	handle_jump()
