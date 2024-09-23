@@ -13,6 +13,7 @@ var ladder_count: int = 0
 var is_climbing: bool = false 
 var was_climbing: bool = false
 var is_on_top_of_ladder: bool = false
+var is_jumping: bool = false
 
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -91,11 +92,14 @@ func handle_jump() -> void:
 	if is_on_floor(): 
 		air_jump = true
 
+	# Regular jump
 	if (is_on_floor() or coyote_timer.time_left > 0.0) and jump_buffer_timer.time_left > 0:
 		animated_sprite.scale = Vector2(0.7, 1.3)
 		velocity.y = movement_data.jump_velocity
 		jump_sound.play()
 		jump_buffer_timer.stop()
+		is_jumping = true
+
 	
 	# Double jump
 	elif not is_on_floor() and (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
@@ -105,8 +109,10 @@ func handle_jump() -> void:
 			air_jump = false
 
 	#Jump variation
-	if Input.is_action_just_released("jump"):
+	if Input.is_action_just_released("jump") and is_jumping:
 		velocity.y *= 0.4
+		is_jumping = false
+
 
 # Handle wall jump
 func handle_wall_jump() -> void:
@@ -164,6 +170,7 @@ func update_animation(direction: float) -> void:
 				animated_sprite.play("run")
 		else:
 			animated_sprite.play("jump")
+			
 
 
 func apply_acceleration(input_axis: float, delta : float) -> void:
