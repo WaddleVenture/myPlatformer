@@ -40,6 +40,6 @@ func _physics_process(delta: float) -> void:
 		actor.velocity.y *= 0.4
 		jump_released = true
 
-
+	# CHANGING STATES
 	if actor.is_on_floor():
 		idle.emit()

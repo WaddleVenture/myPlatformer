@@ -357,8 +357,10 @@ script = ExtResource("8_edp6a")
 actor = NodePath("../..")
 animator = NodePath("../../AnimatedSprite2D")
 
-[node name="FallState" type="Node" parent="FiniteStateMachine"]
+[node name="FallState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator")]
 script = ExtResource("9_16r8h")
+actor = NodePath("../..")
+animator = NodePath("../../AnimatedSprite2D")
 
 [node name="StateLabel" type="Label" parent="."]
 offset_left = -22.0

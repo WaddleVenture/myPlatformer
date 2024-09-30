@@ -6,6 +6,7 @@ extends State
 
 signal run
 signal jump
+signal fall
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -21,15 +22,16 @@ func _exit() -> void:
 
 func _physics_process(delta: float) -> void:
 	actor.move_and_slide()
-	
 	actor.apply_friction(0, delta)
-	actor.apply_gravity(delta)
-	actor.apply_air_resistance(0, delta)
-	
+
+	# CHANGING STATES
 	if Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left"):
 		run.emit()
 	
 	if Input.is_action_just_pressed("jump"):
 		jump.emit()
+	
+	if not actor.is_on_floor():
+		fall.emit()
 	
 	actor.cancel_squash_and_stretch(delta)
