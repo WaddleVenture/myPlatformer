@@ -29,6 +29,9 @@ func _physics_process(delta: float) -> void:
 	actor.apply_air_resistance(input_axis, delta)
 	actor.apply_air_acceleration(input_axis, delta)
 	
+	if Input.is_action_just_pressed("jump"):
+		actor.jump_buffer_timer.start()
+	
 	if Input.is_action_just_pressed("jump") and actor.coyote_timer.time_left > 0:
 		jump.emit()
 		actor.coyote_timer.stop()

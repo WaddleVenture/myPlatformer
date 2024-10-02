@@ -36,10 +36,14 @@ func _physics_process(delta: float) -> void:
 	
 	animator.play("jump")
 	
-	#Jump variation
+	# Jump variation
 	if Input.is_action_just_released("jump") and not jump_released:
 		actor.velocity.y *= 0.4
 		jump_released = true
+	
+	# Jump buffer
+	if Input.is_action_just_pressed("jump"):
+		actor.jump_buffer_timer.start()
 
 	# CHANGING STATES
 	if actor.is_on_floor():
@@ -47,3 +51,5 @@ func _physics_process(delta: float) -> void:
 			run.emit()
 		else:
 			idle.emit()
+			
+			

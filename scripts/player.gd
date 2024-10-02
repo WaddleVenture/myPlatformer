@@ -12,6 +12,7 @@ extends CharacterBody2D
 @onready var fall_state: FallState = $FiniteStateMachine/FallState
 
 @onready var coyote_timer: Timer = $CoyoteTimer
+@onready var jump_buffer_timer: Timer = $JumpBufferTimer
 
 
 @onready var state_label: Label = $StateLabel
@@ -51,7 +52,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	update_state_label(fsm.state)
-	print('COYOTE ',coyote_timer.time_left)
+	print('JUMP BUFFER ',jump_buffer_timer.time_left)
 	pass
 
 

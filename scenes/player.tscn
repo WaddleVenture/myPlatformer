@@ -327,7 +327,7 @@ volume_db = -17.801
 bus = &"SFX"
 
 [node name="JumpBufferTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.15
 one_shot = true
 
 [node name="CoyoteTimer" type="Timer" parent="."]

@@ -28,7 +28,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left"):
 		run.emit()
 	
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") or actor.jump_buffer_timer.time_left > 0:
+		actor.jump_buffer_timer.stop()
 		jump.emit()
 	
 	if not actor.is_on_floor():
