@@ -26,7 +26,8 @@ func _ready() -> void:
 	idle_state.run.connect(fsm.change_state.bind(run_state, idle_state))
 	idle_state.jump.connect(fsm.change_state.bind(jump_state, idle_state))
 	idle_state.fall.connect(fsm.change_state.bind(fall_state, idle_state))
-	
+
+
 	# Run State
 	run_state.idle.connect(fsm.change_state.bind(idle_state, run_state))
 	run_state.jump.connect(fsm.change_state.bind(jump_state, run_state))
@@ -34,6 +35,7 @@ func _ready() -> void:
 
 	# Jump State
 	jump_state.idle.connect(fsm.change_state.bind(idle_state, jump_state))
+	jump_state.run.connect(fsm.change_state.bind(run_state, jump_state))
 
 
 	# Fall State

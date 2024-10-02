@@ -29,4 +29,7 @@ func _physics_process(delta: float) -> void:
 	actor.apply_air_acceleration(input_axis, delta)
 	
 	if actor.is_on_floor():
-		idle.emit()
+		if Input.get_axis("move_left", "move_right") != 0:
+			run.emit()
+		else:
+			idle.emit()

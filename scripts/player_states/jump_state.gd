@@ -9,6 +9,7 @@ extends State
 var jump_released: bool = false
 
 signal idle
+signal run
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -42,4 +43,7 @@ func _physics_process(delta: float) -> void:
 
 	# CHANGING STATES
 	if actor.is_on_floor():
-		idle.emit()
+		if Input.get_axis("move_left", "move_right") != 0:
+			run.emit()
+		else:
+			idle.emit()
