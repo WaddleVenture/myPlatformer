@@ -30,6 +30,9 @@ func _physics_process(delta: float) -> void:
 	actor.apply_air_resistance(input_axis, delta)
 	actor.apply_air_acceleration(input_axis, delta)
 	
+	if not actor.platform_raycast.is_colliding():
+		actor.collision_shape_2d.disabled = false
+	
 	if Input.is_action_just_pressed("jump"):
 		actor.jump_buffer_timer.start()
 	

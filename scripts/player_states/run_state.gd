@@ -31,6 +31,7 @@ func _physics_process(delta: float) -> void:
 	actor.apply_air_resistance(input_axis, delta)
 	actor.apply_air_acceleration(input_axis, delta)
 	actor.cancel_squash_and_stretch(delta)
+	actor.handle_drop()
 	
 	# CHANGING STATES
 	if not Input.is_action_pressed("move_right") and not Input.is_action_pressed("move_left"):

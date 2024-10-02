@@ -308,13 +308,14 @@ radius = 5.0
 [node name="Player" type="CharacterBody2D"]
 z_index = 5
 collision_layer = 2
+collision_mask = 17
 script = ExtResource("1_qwiok")
 movement_data = ExtResource("2_xs7pp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_s5v6h")
-animation = &"jump"
+animation = &"roll"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -367,3 +368,8 @@ offset_left = -22.0
 offset_top = -39.0
 offset_right = 18.0
 offset_bottom = -16.0
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(0, -10)
+target_position = Vector2(0, 16)
+collision_mask = 16

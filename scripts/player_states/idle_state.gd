@@ -23,6 +23,7 @@ func _exit() -> void:
 func _physics_process(delta: float) -> void:
 	actor.move_and_slide()
 	actor.apply_friction(0, delta)
+	actor.handle_drop()
 
 	# CHANGING STATES
 	if Input.is_action_pressed("move_right") or Input.is_action_pressed("move_left"):

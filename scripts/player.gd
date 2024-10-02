@@ -13,6 +13,8 @@ extends CharacterBody2D
 
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
+@onready var platform_raycast: RayCast2D = $RayCast2D
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 
 @onready var state_label: Label = $StateLabel
@@ -52,7 +54,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	update_state_label(fsm.state)
-	print('JUMP BUFFER ',jump_buffer_timer.time_left)
+	#print('JUMP BUFFER ',jump_buffer_timer.time_left)
 	pass
 
 
@@ -88,7 +90,8 @@ func apply_air_resistance(direction, delta: float) -> void:
 
 
 func handle_drop() -> void:
-	if Input.is_action_just_pressed("move_down") and is_on_floor():
+	if Input.is_action_just_pressed("move_down") and is_on_floor() and platform_raycast.is_colliding():
+		collision_shape_2d.disabled = true
 		position.y += 2
 
 
