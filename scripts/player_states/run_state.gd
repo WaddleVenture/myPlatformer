@@ -39,5 +39,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("jump"):
 		jump.emit()
 
-	if not actor.is_on_floor():
+	if not actor.is_on_floor() and actor.coyote_timer.is_stopped():
+		actor.coyote_timer.start()
 		fall.emit()

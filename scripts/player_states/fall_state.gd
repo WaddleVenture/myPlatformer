@@ -6,6 +6,7 @@ extends State
 
 signal run
 signal idle
+signal jump
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -27,6 +28,10 @@ func _physics_process(delta: float) -> void:
 	actor.flip_sprite(input_axis)
 	actor.apply_air_resistance(input_axis, delta)
 	actor.apply_air_acceleration(input_axis, delta)
+	
+	if Input.is_action_just_pressed("jump") and actor.coyote_timer.time_left > 0:
+		jump.emit()
+		actor.coyote_timer.stop()
 	
 	if actor.is_on_floor():
 		if Input.get_axis("move_left", "move_right") != 0:
