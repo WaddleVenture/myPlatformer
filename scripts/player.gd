@@ -10,6 +10,8 @@ extends CharacterBody2D
 @onready var run_state: RunState = $FiniteStateMachine/RunState
 @onready var jump_state: JumpState = $FiniteStateMachine/JumpState
 @onready var fall_state: FallState = $FiniteStateMachine/FallState
+@onready var double_jump_state: DoubleJumpState = $FiniteStateMachine/DoubleJumpState
+
 
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
@@ -41,6 +43,7 @@ func _ready() -> void:
 	# Jump State
 	jump_state.idle.connect(fsm.change_state.bind(idle_state, jump_state))
 	jump_state.run.connect(fsm.change_state.bind(run_state, jump_state))
+	jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, jump_state))
 
 
 	# Fall State
@@ -48,13 +51,20 @@ func _ready() -> void:
 	fall_state.run.connect(fsm.change_state.bind(run_state, fall_state))
 	fall_state.jump.connect(fsm.change_state.bind(jump_state, fall_state))
 
+
+	# Double Jump State
+	double_jump_state.idle.connect(fsm.change_state.bind(idle_state, double_jump_state))
+	double_jump_state.run.connect(fsm.change_state.bind(run_state, double_jump_state))
+	
+	
+
 	update_state_label(fsm.state)
 
 
 
 func _process(delta: float) -> void:
 	update_state_label(fsm.state)
-	#print('JUMP BUFFER ',jump_buffer_timer.time_left)
+	print('JUMP BUFFER ',jump_buffer_timer.time_left)
 	pass
 
 
