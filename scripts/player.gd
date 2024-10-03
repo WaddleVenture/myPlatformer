@@ -223,15 +223,6 @@ func cancel_squash_and_stretch(delta: float) -> void:
 			#just_wall_jumped = true
 #
 #
-#func handle_squash_and_stretch() -> void:
-	#if is_on_floor():
-		#if was_on_air: 
-			#was_on_air = false
-			#animated_sprite.scale = Vector2(1.3,0.7)
-	#else:
-		#was_on_air = true
-#
-#
 #
 #func handle_rolling() -> void:
 	#if is_rolling:

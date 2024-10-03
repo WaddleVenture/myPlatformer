@@ -37,7 +37,9 @@ folder_colors={
 "res://levels/": "yellow",
 "res://resources/": "green",
 "res://scenes/": "teal",
-"res://scripts/": "blue"
+"res://scripts/": "blue",
+"res://scripts/FSM/": "purple",
+"res://scripts/player_states/": "pink"
 }
 
 [input]

@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _enter(from_state: State = null) -> void:
 	set_physics_process(true)
-	if from_state is JumpState or FallState:
+	if from_state is JumpState or from_state is FallState:
 		animator.scale = Vector2(1.3,0.7)
 
 func _exit() -> void:
