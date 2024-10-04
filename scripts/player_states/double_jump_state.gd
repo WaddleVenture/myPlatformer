@@ -15,6 +15,7 @@ func _ready() -> void:
 func _enter(from_state: State = null) -> void:
 	set_physics_process(true)
 	jump_sound.play()
+	animator.scale = Vector2(0.9, 1.1)
 	actor.velocity.y = actor.movement_data.jump_velocity * 0.8
 
 
