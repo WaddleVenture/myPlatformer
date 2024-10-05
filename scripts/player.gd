@@ -1,27 +1,37 @@
 class_name Player
 extends CharacterBody2D
 
+# EXPORT
 @export var movement_data: PlayerMovementData 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-
+# STATES
 @onready var fsm: FiniteStateMachine = $FiniteStateMachine
 @onready var idle_state: IdleState = $FiniteStateMachine/IdleState
 @onready var run_state: RunState = $FiniteStateMachine/RunState
 @onready var jump_state: JumpState = $FiniteStateMachine/JumpState
 @onready var fall_state: FallState = $FiniteStateMachine/FallState
 @onready var double_jump_state: DoubleJumpState = $FiniteStateMachine/DoubleJumpState
+@onready var wall_jump_state: WallJumpState = $FiniteStateMachine/WallJumpState
 
-
+# TIMER
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
+@onready var wall_jump_timer: Timer = $WallJumpTimer
+
+# OTHER IMPORTS
 @onready var platform_raycast: RayCast2D = $RayCast2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
-
-
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var state_label: Label = $StateLabel
 
+# VARIABLES
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+## Wall jump
+var was_on_wall: bool
+var was_wall_normal = Vector2.ZERO
+var wall_normal = Vector2.ZERO
+
 
 func update_state_label(current_state: State) -> void:
 	state_label.text = current_state.name
@@ -44,6 +54,7 @@ func _ready() -> void:
 	jump_state.idle.connect(fsm.change_state.bind(idle_state, jump_state))
 	jump_state.run.connect(fsm.change_state.bind(run_state, jump_state))
 	jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, jump_state))
+	jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, jump_state))
 
 
 	# Fall State
@@ -55,8 +66,13 @@ func _ready() -> void:
 	# Double Jump State
 	double_jump_state.idle.connect(fsm.change_state.bind(idle_state, double_jump_state))
 	double_jump_state.run.connect(fsm.change_state.bind(run_state, double_jump_state))
-	
-	
+
+
+	# Wall Jump State
+	wall_jump_state.idle.connect(fsm.change_state.bind(idle_state, wall_jump_state))
+	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
+	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
+
 
 	update_state_label(fsm.state)
 
@@ -130,7 +146,6 @@ func cancel_squash_and_stretch(delta: float) -> void:
 #var is_on_top_of_ladder: bool = false
 #var is_jumping: bool = false
 #
-#var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 #
 #@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 #@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
