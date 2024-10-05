@@ -133,6 +133,21 @@ func cancel_squash_and_stretch(delta: float) -> void:
 	animated_sprite.scale.y = move_toward(animated_sprite.scale.y, 1, 2 * delta)
 
 
+func store_wall_jump_normal() -> void:
+	# Detect wall position
+	was_on_wall = is_on_wall_only()
+	
+	# Storing the wall normal
+	if was_on_wall:
+		was_wall_normal = get_wall_normal()
+
+func start_wall_jump_timer() -> void:
+	# Check if the player just left the wall to start a timer
+	var just_left_wall = was_on_wall and not is_on_wall()
+	if just_left_wall:
+		wall_jump_timer.start()
+
+
 #var is_alive: bool = true
 #var is_rolling: bool = false
 #var was_on_air: bool = false

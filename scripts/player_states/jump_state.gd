@@ -27,20 +27,12 @@ func _exit() -> void:
 	set_physics_process(false)
 
 func _physics_process(delta: float) -> void:
+	
+	actor.store_wall_jump_normal()
 
 	actor.move_and_slide()
 	
-	## Detect wall position
-	#actor.was_on_wall = actor.is_on_wall_only()
-	#
-	## Storing the wall normal
-	#if actor.was_on_wall:
-		#actor.was_wall_normal = actor.get_wall_normal()
-	#
-	## Check if the player just left the wall to start a timer
-	#var just_left_wall = actor.was_on_wall and not actor.is_on_wall()
-	#if just_left_wall:
-		#actor.wall_jump_timer.start()
+	actor.start_wall_jump_timer()
 	
 	
 	actor.velocity.y += actor.gravity * delta
@@ -62,6 +54,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		actor.jump_buffer_timer.start()
 
+
 	# CHANGING STATES
 	if actor.is_on_floor():
 		if Input.get_axis("move_left", "move_right") != 0:
@@ -72,7 +65,14 @@ func _physics_process(delta: float) -> void:
 	if (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
 		if Input.is_action_just_pressed("jump"):
 			double_jump.emit()
-	
-	if (PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump):
+
+
+	if PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 
+		if not actor.is_on_wall_only() and actor.wall_jump_timer.time_left <= 0.0 : return
+		actor.wall_normal = actor.get_wall_normal()
+		if actor.wall_jump_timer.time_left > 0.0: 
+			actor.wall_normal = actor.was_wall_normal
+		
 		if Input.is_action_just_pressed("jump"):
 			wall_jump.emit()
+				
