@@ -74,7 +74,7 @@ func _ready() -> void:
 	wall_jump_state.idle.connect(fsm.change_state.bind(idle_state, wall_jump_state))
 	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
-	wall_jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, wall_jump_state))
+	
 
 
 	update_state_label(fsm.state)
@@ -107,6 +107,7 @@ func apply_air_acceleration(input_axis: float, delta : float) -> void:
 func apply_friction(input_axis: float, delta: float) -> void:
 	if input_axis == 0:
 		velocity.x = move_toward(velocity.x, 0, movement_data.friction * delta)
+
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():

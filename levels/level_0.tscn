@@ -251,7 +251,7 @@ autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_o6fjh")]
-position = Vector2(-37, 34)
+position = Vector2(50, 31)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(0, -8)
@@ -426,7 +426,7 @@ bus = &"Music"
 position = Vector2(543, -118)
 
 [node name="PowerUpFruit" parent="." instance=ExtResource("12_lu015")]
-position = Vector2(-19, 48)
+position = Vector2(252, 55)
 
 [node name="PowerUpFruit2" parent="." instance=ExtResource("12_lu015")]
 position = Vector2(376, 5)
