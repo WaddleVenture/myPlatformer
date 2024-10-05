@@ -61,11 +61,13 @@ func _ready() -> void:
 	fall_state.idle.connect(fsm.change_state.bind(idle_state, fall_state))
 	fall_state.run.connect(fsm.change_state.bind(run_state, fall_state))
 	fall_state.jump.connect(fsm.change_state.bind(jump_state, fall_state))
+	fall_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, fall_state))
 
 
 	# Double Jump State
 	double_jump_state.idle.connect(fsm.change_state.bind(idle_state, double_jump_state))
 	double_jump_state.run.connect(fsm.change_state.bind(run_state, double_jump_state))
+	double_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, double_jump_state))
 
 
 	# Wall Jump State
