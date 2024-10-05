@@ -10,7 +10,7 @@ extends State
 signal idle
 signal run
 signal wall_jump
-#signal double_jump
+signal double_jump
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -60,7 +60,6 @@ func _physics_process(delta: float) -> void:
 
 
 	elif PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 
-		if not actor.is_on_wall_only() and actor.wall_jump_timer.time_left <= 0.0 : return
 		actor.wall_normal = actor.get_wall_normal()
 		if actor.wall_jump_timer.time_left > 0.0: 
 			actor.wall_normal = actor.was_wall_normal
@@ -69,6 +68,6 @@ func _physics_process(delta: float) -> void:
 			wall_jump.emit()
 
 
-	#if (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
-		#if Input.is_action_just_pressed("jump"):
-			#double_jump.emit()
+	if (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
+		if Input.is_action_just_pressed("jump") and not actor.is_on_wall_only() and actor.wall_jump_timer.time_left <= 0.0 :
+			double_jump.emit()

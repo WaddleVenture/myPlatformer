@@ -72,6 +72,7 @@ func _ready() -> void:
 	wall_jump_state.idle.connect(fsm.change_state.bind(idle_state, wall_jump_state))
 	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
+	wall_jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, wall_jump_state))
 
 
 	update_state_label(fsm.state)
