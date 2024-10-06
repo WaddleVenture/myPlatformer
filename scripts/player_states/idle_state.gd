@@ -7,6 +7,7 @@ extends State
 signal run
 signal jump
 signal fall
+signal roll
 
 var squash_states = [JumpState, FallState, DoubleJumpState]
 
@@ -38,5 +39,8 @@ func _physics_process(delta: float) -> void:
 	
 	if not actor.is_on_floor():
 		fall.emit()
+	
+	if Input.is_action_just_pressed("roll") and actor.is_on_floor():
+		roll.emit()
 	
 	actor.cancel_squash_and_stretch(delta)

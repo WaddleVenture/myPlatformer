@@ -7,6 +7,7 @@ extends State
 signal idle
 signal jump
 signal fall
+signal roll
 
 var squash_states = [JumpState, FallState, DoubleJumpState]
 
@@ -48,3 +49,6 @@ func _physics_process(delta: float) -> void:
 	if not actor.is_on_floor() and actor.coyote_timer.is_stopped():
 		actor.coyote_timer.start()
 		fall.emit()
+	
+	if Input.is_action_just_pressed("roll") and actor.is_on_floor():
+		roll.emit()

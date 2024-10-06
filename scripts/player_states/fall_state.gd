@@ -15,7 +15,8 @@ func _ready() -> void:
 func _enter(from_state: State = null) -> void:
 	set_physics_process(true)
 	animator.scale = Vector2(1, 1)
-	animator.play("jump")
+	if from_state is not RollState:
+		animator.play("jump")
 
 
 func _exit() -> void:

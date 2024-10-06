@@ -12,6 +12,7 @@ extends CharacterBody2D
 @onready var fall_state: FallState = $FiniteStateMachine/FallState
 @onready var double_jump_state: DoubleJumpState = $FiniteStateMachine/DoubleJumpState
 @onready var wall_jump_state: WallJumpState = $FiniteStateMachine/WallJumpState
+@onready var roll_state: RollState = $FiniteStateMachine/RollState
 
 # TIMER
 @onready var coyote_timer: Timer = $CoyoteTimer
@@ -42,12 +43,14 @@ func _ready() -> void:
 	idle_state.run.connect(fsm.change_state.bind(run_state, idle_state))
 	idle_state.jump.connect(fsm.change_state.bind(jump_state, idle_state))
 	idle_state.fall.connect(fsm.change_state.bind(fall_state, idle_state))
+	idle_state.roll.connect(fsm.change_state.bind(roll_state, idle_state))
 
 
 	# Run State
 	run_state.idle.connect(fsm.change_state.bind(idle_state, run_state))
 	run_state.jump.connect(fsm.change_state.bind(jump_state, run_state))
 	run_state.fall.connect(fsm.change_state.bind(fall_state, run_state))
+	run_state.roll.connect(fsm.change_state.bind(roll_state, run_state))
 
 
 	# Jump State
@@ -74,6 +77,13 @@ func _ready() -> void:
 	wall_jump_state.idle.connect(fsm.change_state.bind(idle_state, wall_jump_state))
 	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
+
+
+	# Roll State
+	roll_state.idle.connect(fsm.change_state.bind(idle_state, roll_state))
+	roll_state.run.connect(fsm.change_state.bind(run_state, roll_state))
+	roll_state.jump.connect(fsm.change_state.bind(jump_state, roll_state))
+	roll_state.fall.connect(fsm.change_state.bind(fall_state, roll_state))
 	
 
 
@@ -83,7 +93,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	update_state_label(fsm.state)
-	print('JUMP BUFFER ',jump_buffer_timer.time_left)
+	#print('JUMP BUFFER ',jump_buffer_timer.time_left)
 	pass
 
 
@@ -181,10 +191,6 @@ func start_wall_jump_timer() -> void:
 	#PlayerPowers.reset_temp_powers()
 #
 #
-#func start_roll() -> void:
-	#if Input.is_action_just_pressed("roll") and is_on_floor() and not is_rolling:
-		#is_rolling = true
-		#animated_sprite.play("roll")
 #
 #
 ## Handle vertical movement while on the ladder
@@ -268,16 +274,6 @@ func start_wall_jump_timer() -> void:
 #
 #
 #
-#func handle_rolling() -> void:
-	#if is_rolling:
-		#if animated_sprite.flip_h:
-			#velocity.x = -movement_data.roll_speed
-		#else:
-			#velocity.x = movement_data.roll_speed
-			#
-		#if not animated_sprite.is_playing():
-			#is_rolling = false
-
 #
 #
 #
@@ -326,8 +322,6 @@ func start_wall_jump_timer() -> void:
 	#
 	#handle_wall_jump()
 	#handle_jump()
-	#start_roll()
-	#handle_rolling()
 #
 #
 	#var input_axis := Input.get_axis("move_left", "move_right")
