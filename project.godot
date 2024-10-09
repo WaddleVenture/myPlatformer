@@ -15,6 +15,10 @@ run/main_scene="res://scenes/game.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://oui.PNG"
 
+[audio]
+
+buses/default_bus_layout="res://resources/default_bus_layout.tres"
+
 [autoload]
 
 PlayerPowers="*res://datas/PlayerPowers.gd"
@@ -24,6 +28,19 @@ LevelTransition="*res://scenes/level_transition.tscn"
 [display]
 
 window/stretch/mode="canvas_items"
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "red",
+"res://datas/": "orange",
+"res://levels/": "yellow",
+"res://resources/": "green",
+"res://scenes/": "teal",
+"res://scripts/": "blue",
+"res://scripts/FSM/": "purple",
+"res://scripts/player_states/": "pink"
+}
 
 [input]
 
@@ -75,6 +92,8 @@ move_up={
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Hazard"
+2d_physics/layer_4="Ladder"
+2d_physics/layer_5="Platform"
 
 [rendering]
 
