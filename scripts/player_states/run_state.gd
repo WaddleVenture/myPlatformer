@@ -8,6 +8,7 @@ signal idle
 signal jump
 signal fall
 signal roll
+signal death
 
 var squash_states = [JumpState, FallState, DoubleJumpState]
 
@@ -52,3 +53,6 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("roll") and actor.is_on_floor():
 		roll.emit()
+	
+	if not actor.is_alive:
+		death.emit()

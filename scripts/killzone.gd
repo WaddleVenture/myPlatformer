@@ -6,7 +6,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if !body.is_rolling : 
 		print("You died!")
 		Engine.time_scale = 0.5
-		body.death()
+		body.is_alive = false
 		timer.start()
 
 

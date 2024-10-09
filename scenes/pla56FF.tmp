@@ -382,10 +382,8 @@ script = ExtResource("12_kh0iv")
 actor = NodePath("../..")
 animator = NodePath("../../AnimatedSprite2D")
 
-[node name="DeathState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator")]
+[node name="DeathState" type="Node" parent="FiniteStateMachine"]
 script = ExtResource("13_1a7kq")
-actor = NodePath("../..")
-animator = NodePath("../../AnimatedSprite2D")
 
 [node name="StateLabel" type="Label" parent="."]
 offset_left = -22.0

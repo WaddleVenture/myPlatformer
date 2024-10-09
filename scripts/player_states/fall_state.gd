@@ -8,6 +8,7 @@ signal run
 signal idle
 signal jump
 signal wall_jump
+signal death
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -60,3 +61,6 @@ func _physics_process(delta: float) -> void:
 		
 		if Input.is_action_just_pressed("jump"):
 			wall_jump.emit()
+	
+	if not actor.is_alive:
+		death.emit()

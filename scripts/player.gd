@@ -13,6 +13,8 @@ extends CharacterBody2D
 @onready var double_jump_state: DoubleJumpState = $FiniteStateMachine/DoubleJumpState
 @onready var wall_jump_state: WallJumpState = $FiniteStateMachine/WallJumpState
 @onready var roll_state: RollState = $FiniteStateMachine/RollState
+@onready var death_state: DeathState = $FiniteStateMachine/DeathState
+
 
 # TIMER
 @onready var coyote_timer: Timer = $CoyoteTimer
@@ -27,6 +29,8 @@ extends CharacterBody2D
 
 # VARIABLES
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
+var is_alive: bool = true
+var is_rolling: bool = false
 
 ## Wall jump
 var was_on_wall: bool
@@ -44,6 +48,7 @@ func _ready() -> void:
 	idle_state.jump.connect(fsm.change_state.bind(jump_state, idle_state))
 	idle_state.fall.connect(fsm.change_state.bind(fall_state, idle_state))
 	idle_state.roll.connect(fsm.change_state.bind(roll_state, idle_state))
+	idle_state.death.connect(fsm.change_state.bind(death_state, idle_state))
 
 
 	# Run State
@@ -51,6 +56,7 @@ func _ready() -> void:
 	run_state.jump.connect(fsm.change_state.bind(jump_state, run_state))
 	run_state.fall.connect(fsm.change_state.bind(fall_state, run_state))
 	run_state.roll.connect(fsm.change_state.bind(roll_state, run_state))
+	run_state.death.connect(fsm.change_state.bind(death_state, run_state))
 
 
 	# Jump State
@@ -58,6 +64,7 @@ func _ready() -> void:
 	jump_state.run.connect(fsm.change_state.bind(run_state, jump_state))
 	jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, jump_state))
 	jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, jump_state))
+	jump_state.death.connect(fsm.change_state.bind(death_state, jump_state))
 
 
 	# Fall State
@@ -65,18 +72,21 @@ func _ready() -> void:
 	fall_state.run.connect(fsm.change_state.bind(run_state, fall_state))
 	fall_state.jump.connect(fsm.change_state.bind(jump_state, fall_state))
 	fall_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, fall_state))
+	fall_state.death.connect(fsm.change_state.bind(death_state, fall_state))
 
 
 	# Double Jump State
 	double_jump_state.idle.connect(fsm.change_state.bind(idle_state, double_jump_state))
 	double_jump_state.run.connect(fsm.change_state.bind(run_state, double_jump_state))
 	double_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, double_jump_state))
+	double_jump_state.death.connect(fsm.change_state.bind(death_state, double_jump_state))
 
 
 	# Wall Jump State
 	wall_jump_state.idle.connect(fsm.change_state.bind(idle_state, wall_jump_state))
 	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
+	wall_jump_state.death.connect(fsm.change_state.bind(death_state, wall_jump_state))
 
 
 	# Roll State
@@ -84,7 +94,7 @@ func _ready() -> void:
 	roll_state.run.connect(fsm.change_state.bind(run_state, roll_state))
 	roll_state.jump.connect(fsm.change_state.bind(jump_state, roll_state))
 	roll_state.fall.connect(fsm.change_state.bind(fall_state, roll_state))
-	
+
 
 
 	update_state_label(fsm.state)
@@ -162,7 +172,6 @@ func start_wall_jump_timer() -> void:
 		wall_jump_timer.start()
 
 
-#var is_alive: bool = true
 #var is_rolling: bool = false
 #var was_on_air: bool = false
 #var air_jump: bool = false
@@ -182,16 +191,7 @@ func start_wall_jump_timer() -> void:
 #@onready var jump_buffer_timer: Timer = $JumpBufferTimer
 #@onready var wall_jump_timer: Timer = $WallJumpTimer
 #
-#
-#
-#func death() -> void:
-	#is_alive = false
-	#velocity = Vector2.ZERO 
-	#animated_sprite.play("death")
-	#PlayerPowers.reset_temp_powers()
-#
-#
-#
+
 #
 ## Handle vertical movement while on the ladder
 #func climb_ladder() -> void:
@@ -279,9 +279,7 @@ func start_wall_jump_timer() -> void:
 #
 #func _physics_process(delta: float) -> void:
 #
-	#if not is_alive:
-		## Prevent any movement or action after death
-		#return
+
 #
 	#var was_on_floor = is_on_floor()
 	#var was_on_wall = is_on_wall_only()

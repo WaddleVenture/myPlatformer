@@ -12,11 +12,12 @@ signal idle
 signal run
 signal double_jump
 signal wall_jump
+signal death
 
 func _ready() -> void:
 	set_physics_process(false)
 
-func _enter(from_state: State = null) -> void:
+func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
 	animator.scale = Vector2(0.9, 1.1)
 	actor.velocity.y = actor.movement_data.jump_velocity
@@ -75,4 +76,6 @@ func _physics_process(delta: float) -> void:
 		
 		if Input.is_action_just_pressed("jump"):
 			wall_jump.emit()
-				
+	
+	if not actor.is_alive:
+		death.emit()
