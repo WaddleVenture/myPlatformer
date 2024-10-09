@@ -11,10 +11,12 @@ signal idle
 signal run
 signal wall_jump
 signal death
+signal ladder
 
 
 func _ready() -> void:
 	set_physics_process(false)
+
 
 func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
@@ -28,8 +30,10 @@ func _enter(_from_state: State = null) -> void:
 		actor.velocity.x = actor.wall_normal.x * actor.movement_data.wall_jump_neutral_speed
 		actor.velocity.y = actor.movement_data.jump_velocity 
 
+
 func _exit() -> void:
 	set_physics_process(false)
+
 
 func _physics_process(delta: float) -> void:
 	actor.store_wall_jump_normal()
@@ -60,13 +64,20 @@ func _physics_process(delta: float) -> void:
 			idle.emit()
 
 
+	var is_climbing = actor.on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))
+	if is_climbing and actor.ladder_count > 0:
+		ladder.emit()
+
+
 	if not actor.is_on_wall_only() and actor.wall_jump_timer.time_left <= 0.0 : return
 	actor.wall_normal = actor.get_wall_normal()
 	if actor.wall_jump_timer.time_left > 0.0: 
 		actor.wall_normal = actor.was_wall_normal
-	
+
+
 	if Input.is_action_just_pressed("jump"):
 		wall_jump.emit()
-	
+
+
 	if not actor.is_alive:
 		death.emit()

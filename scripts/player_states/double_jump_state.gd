@@ -10,9 +10,12 @@ signal idle
 signal run
 signal wall_jump
 signal death
+signal ladder
+
 
 func _ready() -> void:
 	set_physics_process(false)
+
 
 func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
@@ -24,20 +27,24 @@ func _enter(_from_state: State = null) -> void:
 func _exit() -> void:
 	set_physics_process(false)
 
+
 func _physics_process(delta: float) -> void:
 	actor.store_wall_jump_normal()
 	actor.move_and_slide()
 	actor.start_wall_jump_timer()
 	actor.velocity.y += actor.gravity * delta
-	
+
+
 	var input_axis := Input.get_axis("move_left", "move_right")
 	actor.apply_air_acceleration(input_axis, delta)
 	actor.apply_air_resistance(input_axis, delta)
 	actor.flip_sprite(input_axis)
 	animator.play("jump")
-	
+
+
 	if Input.is_action_just_pressed("jump"):
 		actor.jump_buffer_timer.start()
+
 
 	# CHANGING STATES
 	if actor.is_on_floor():
@@ -45,6 +52,11 @@ func _physics_process(delta: float) -> void:
 			run.emit()
 		else:
 			idle.emit()
+
+
+	var is_climbing = actor.on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))
+	if is_climbing and actor.ladder_count > 0:
+		ladder.emit()
 
 
 	if PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 
@@ -55,6 +67,10 @@ func _physics_process(delta: float) -> void:
 		
 		if Input.is_action_just_pressed("jump"):
 			wall_jump.emit()
-	
+
+
 	if not actor.is_alive:
 		death.emit()
+
+
+	

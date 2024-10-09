@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cq0gonfovkxk5"]
+[gd_scene load_steps=54 format=3 uid="uid://cq0gonfovkxk5"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_qwiok"]
 [ext_resource type="Texture2D" uid="uid://clgxp3r7r60ho" path="res://assets/sprites/knight.png" id="1_xx7v0"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/player_states/wall_jump_state.gd" id="11_xvplm"]
 [ext_resource type="Script" path="res://scripts/player_states/roll_state.gd" id="12_kh0iv"]
 [ext_resource type="Script" path="res://scripts/player_states/death_state.gd" id="13_1a7kq"]
+[ext_resource type="Script" path="res://scripts/player_states/ladder_state.gd" id="14_k5blr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vp0d0"]
 atlas = ExtResource("1_xx7v0")
@@ -384,6 +385,11 @@ animator = NodePath("../../AnimatedSprite2D")
 
 [node name="DeathState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator")]
 script = ExtResource("13_1a7kq")
+actor = NodePath("../..")
+animator = NodePath("../../AnimatedSprite2D")
+
+[node name="LadderState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "animator")]
+script = ExtResource("14_k5blr")
 actor = NodePath("../..")
 animator = NodePath("../../AnimatedSprite2D")
 

@@ -4,6 +4,7 @@ extends CharacterBody2D
 # EXPORT
 @export var movement_data: PlayerMovementData 
 
+
 # STATES
 @onready var fsm: FiniteStateMachine = $FiniteStateMachine
 @onready var idle_state: IdleState = $FiniteStateMachine/IdleState
@@ -14,6 +15,7 @@ extends CharacterBody2D
 @onready var wall_jump_state: WallJumpState = $FiniteStateMachine/WallJumpState
 @onready var roll_state: RollState = $FiniteStateMachine/RollState
 @onready var death_state: DeathState = $FiniteStateMachine/DeathState
+@onready var ladder_state: LadderState = $FiniteStateMachine/LadderState
 
 
 # TIMER
@@ -21,25 +23,34 @@ extends CharacterBody2D
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var wall_jump_timer: Timer = $WallJumpTimer
 
+
 # OTHER IMPORTS
 @onready var platform_raycast: RayCast2D = $RayCast2D
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var state_label: Label = $StateLabel
 
+
 # VARIABLES
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 var is_alive: bool = true
 var is_rolling: bool = false
+
 
 ## Wall jump
 var was_on_wall: bool
 var was_wall_normal = Vector2.ZERO
 var wall_normal = Vector2.ZERO
 
+## Ladder 
+var on_ladder: Area2D = null
+var ladder_count: int = 0
+var is_on_top_of_ladder: bool = false
+
 
 func update_state_label(current_state: State) -> void:
 	state_label.text = current_state.name
+
 
 func _ready() -> void:
 	
@@ -65,6 +76,7 @@ func _ready() -> void:
 	jump_state.double_jump.connect(fsm.change_state.bind(double_jump_state, jump_state))
 	jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, jump_state))
 	jump_state.death.connect(fsm.change_state.bind(death_state, jump_state))
+	jump_state.ladder.connect(fsm.change_state.bind(ladder_state, jump_state))
 
 
 	# Fall State
@@ -73,6 +85,7 @@ func _ready() -> void:
 	fall_state.jump.connect(fsm.change_state.bind(jump_state, fall_state))
 	fall_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, fall_state))
 	fall_state.death.connect(fsm.change_state.bind(death_state, fall_state))
+	fall_state.ladder.connect(fsm.change_state.bind(ladder_state, fall_state))
 
 
 	# Double Jump State
@@ -80,6 +93,7 @@ func _ready() -> void:
 	double_jump_state.run.connect(fsm.change_state.bind(run_state, double_jump_state))
 	double_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, double_jump_state))
 	double_jump_state.death.connect(fsm.change_state.bind(death_state, double_jump_state))
+	double_jump_state.ladder.connect(fsm.change_state.bind(ladder_state, double_jump_state))
 
 
 	# Wall Jump State
@@ -87,6 +101,7 @@ func _ready() -> void:
 	wall_jump_state.run.connect(fsm.change_state.bind(run_state, wall_jump_state))
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
 	wall_jump_state.death.connect(fsm.change_state.bind(death_state, wall_jump_state))
+	wall_jump_state.ladder.connect(fsm.change_state.bind(ladder_state, wall_jump_state))
 
 
 	# Roll State
@@ -96,6 +111,10 @@ func _ready() -> void:
 	roll_state.fall.connect(fsm.change_state.bind(fall_state, roll_state))
 
 
+	# Ladder State
+	ladder_state.fall.connect(fsm.change_state.bind(fall_state, ladder_state))
+	ladder_state.jump.connect(fsm.change_state.bind(jump_state, ladder_state))
+	ladder_state.death.connect(fsm.change_state.bind(death_state, ladder_state))
 
 	update_state_label(fsm.state)
 
@@ -132,6 +151,7 @@ func apply_friction(input_axis: float, delta: float) -> void:
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
+		
 
 
 func apply_air_resistance(direction, delta: float) -> void:
@@ -165,6 +185,7 @@ func store_wall_jump_normal() -> void:
 	if was_on_wall:
 		was_wall_normal = get_wall_normal()
 
+
 func start_wall_jump_timer() -> void:
 	# Check if the player just left the wall to start a timer
 	var just_left_wall = was_on_wall and not is_on_wall()
@@ -172,156 +193,20 @@ func start_wall_jump_timer() -> void:
 		wall_jump_timer.start()
 
 
-#var is_rolling: bool = false
-#var was_on_air: bool = false
-#var air_jump: bool = false
-#var just_wall_jumped: bool = false
-#var was_wall_normal = Vector2.ZERO
-#var on_ladder: Area2D = null
-#var ladder_count: int = 0
-#var is_climbing: bool = false 
-#var was_climbing: bool = false
-#var is_on_top_of_ladder: bool = false
-#var is_jumping: bool = false
-#
-#
-#@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-#@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
-#@onready var coyote_timer: Timer = $CoyoteTimer
-#@onready var jump_buffer_timer: Timer = $JumpBufferTimer
-#@onready var wall_jump_timer: Timer = $WallJumpTimer
-#
+func add_ladder_count(ladder: Area2D) -> void:
+	ladder_count += 1
+	on_ladder = ladder
 
-#
-## Handle vertical movement while on the ladder
-#func climb_ladder() -> void:
-	#if Input.is_action_pressed("move_up") and not is_on_top_of_ladder:
-		#velocity.y = -movement_data.speed
-	#elif Input.is_action_pressed("move_down"):
-		#velocity.y = movement_data.speed
-	#else:
-		#velocity.y = 0
-	#was_climbing = true
-#
-#
-#func add_ladder_count(ladder: Area2D) -> void:
-	#ladder_count += 1
-	#on_ladder = ladder
-#
-#func remove_ladder_count(_ladder: Area2D) -> void:
-	#if ladder_count > 0:
-		#ladder_count -= 1
-	#if ladder_count == 0:
-		#on_ladder = null
-#
-#func apply_gravity(delta: float) -> void:
-	#if (is_climbing or was_climbing) and ladder_count > 0:
-		#return
-	#else:
-		#if not is_on_floor():
-			#velocity.y += gravity * delta
 
-#
-#
-#func handle_jump() -> void:
-#
-	## Handle jump for ladder
-	#if (is_climbing or was_climbing) and ladder_count > 0:
-		#if Input.is_action_just_pressed("jump"):
-			#on_ladder = null
-			#velocity.y = movement_data.jump_velocity 
-			#jump_sound.play()
-			#was_climbing = false
-			#return
-#
-	#if is_on_floor(): 
-		#air_jump = true
-#
-	## Regular jump
-	#if (is_on_floor() or coyote_timer.time_left > 0.0) and jump_buffer_timer.time_left > 0:
-		#animated_sprite.scale = Vector2(0.7, 1.3)
-		#velocity.y = movement_data.jump_velocity
-		#jump_sound.play()
-		#jump_buffer_timer.stop()
-		#is_jumping = true
-#
-	#
-	## Double jump
-	#elif not is_on_floor() and (PlayerPowers.can_double_jump or PlayerPowers.temp_can_double_jump):
-		#if Input.is_action_just_pressed("jump") and air_jump and not just_wall_jumped:
-			#velocity.y = movement_data.jump_velocity * 0.8
-			#jump_sound.play()
-			#air_jump = false
-#
-	##Jump variation
-	#if Input.is_action_just_released("jump") and is_jumping:
-		#velocity.y *= 0.4
-		#is_jumping = false
+func remove_ladder_count(_ladder: Area2D) -> void:
+	if ladder_count > 0:
+		ladder_count -= 1
+	if ladder_count == 0:
+		on_ladder = null
 
-#
-## Handle wall jump
-#func handle_wall_jump() -> void:
-	#if PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 
-		#if not is_on_wall_only() and wall_jump_timer.time_left <= 0.0 : return
-		#var wall_normal = get_wall_normal()
-		#if wall_jump_timer.time_left > 0.0: 
-			#wall_normal = was_wall_normal
-		#
-		#if Input.is_action_just_pressed("jump"):
-			#velocity.x = wall_normal.x * movement_data.speed
-			#velocity.y = movement_data.jump_velocity 
-			#just_wall_jumped = true
-#
-#
-#
-#
-#
-#
-#func _physics_process(delta: float) -> void:
-#
 
-#
-	#var was_on_floor = is_on_floor()
-	#var was_on_wall = is_on_wall_only()
-	#
-	#is_climbing = on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))
-#
-	#if (is_climbing or was_climbing) and ladder_count > 0:
-		#climb_ladder()
-	#
-	#
-	#if ladder_count == 0 and not is_on_top_of_ladder:
-		#was_climbing = false
-#
-#
-	## Storing the wall normal
-	#if was_on_wall:
-		#was_wall_normal = get_wall_normal()
-	#
-	#move_and_slide()
-	#
-	## Handle coyote time
-	#var just_left_ledge = was_on_floor and not is_on_floor() and velocity.y >= 0
-	#
-	#var just_left_wall = was_on_wall and not is_on_wall()
-	#
-	#if just_left_wall:
-		#wall_jump_timer.start()
-#
-	#if just_left_ledge:
-		#coyote_timer.start()
-#
-	## Handle jump buffer
-	#if Input.is_action_just_pressed("jump"):
-		#jump_buffer_timer.start()
-#
-#
-	#handle_squash_and_stretch()
-	#
-	#handle_wall_jump()
-	#handle_jump()
-#
-#
-	#var input_axis := Input.get_axis("move_left", "move_right")
-#
-	#just_wall_jumped = false
+func apply_ladder_movement(input_axis: float) -> void:
+	if input_axis:
+		velocity.x = input_axis * movement_data.speed / 3
+	else:
+		velocity.x = move_toward(velocity.x, 0, movement_data.speed / 3)

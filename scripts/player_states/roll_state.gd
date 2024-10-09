@@ -12,16 +12,18 @@ signal fall
 func _ready() -> void:
 	set_physics_process(false)
 
+
 func _enter(_from_state: State = null) -> void:
 	actor.is_rolling = true
 	set_physics_process(true)
 	animator.play("roll")
 	animator.scale = Vector2(1, 1)
-	
+
 
 func _exit() -> void:
 	set_physics_process(false)
 	actor.is_rolling = false
+
 
 func _physics_process(_delta: float) -> void:
 	actor.move_and_slide()
@@ -40,7 +42,8 @@ func _physics_process(_delta: float) -> void:
 				run.emit()
 			else:
 				idle.emit()
-	
+
+
 	if Input.is_action_pressed("jump") or actor.jump_buffer_timer.time_left > 0:
 		actor.jump_buffer_timer.stop()
 		jump.emit()

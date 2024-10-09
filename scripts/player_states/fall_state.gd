@@ -9,9 +9,11 @@ signal idle
 signal jump
 signal wall_jump
 signal death
+signal ladder
 
 func _ready() -> void:
 	set_physics_process(false)
+
 
 func _enter(from_state: State = null) -> void:
 	set_physics_process(true)
@@ -25,7 +27,6 @@ func _exit() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	
 	actor.store_wall_jump_normal()
 	actor.move_and_slide()
 	actor.start_wall_jump_timer()
@@ -41,11 +42,18 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("jump"):
 		actor.jump_buffer_timer.start()
-	
+
+
+	# CHANGING STATES
+	var is_climbing = actor.on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))
+	if is_climbing and actor.ladder_count > 0:
+		ladder.emit()
+
 	if Input.is_action_just_pressed("jump") and actor.coyote_timer.time_left > 0:
 		jump.emit()
 		actor.coyote_timer.stop()
-	
+
+
 	if actor.is_on_floor():
 		if Input.get_axis("move_left", "move_right") != 0:
 			run.emit()
@@ -61,6 +69,7 @@ func _physics_process(delta: float) -> void:
 		
 		if Input.is_action_just_pressed("jump"):
 			wall_jump.emit()
-	
+
+
 	if not actor.is_alive:
 		death.emit()

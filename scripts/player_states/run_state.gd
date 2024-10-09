@@ -14,17 +14,18 @@ var squash_states = [JumpState, FallState, DoubleJumpState]
 
 func _ready() -> void:
 	set_physics_process(false)
-	
+
 
 func _enter(from_state: State = null) -> void:
 	set_physics_process(true)
 	for state in squash_states:
 		if is_instance_of(from_state, state):
 			animator.scale = Vector2(1.3,0.7)
-	
+
 
 func _exit() -> void:
 	set_physics_process(false)
+
 
 func _physics_process(delta: float) -> void:
 	actor.move_and_slide()
