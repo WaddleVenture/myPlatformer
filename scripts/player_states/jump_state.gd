@@ -14,6 +14,7 @@ signal double_jump
 signal wall_jump
 signal death
 signal ladder
+signal dash
 
 
 func _ready() -> void:
@@ -68,6 +69,13 @@ func _physics_process(delta: float) -> void:
 			run.emit()
 		else:
 			idle.emit()
+
+
+
+	if Input.is_action_just_pressed("dash") and actor.can_dash:
+		actor.dash_timer.start()
+		actor.can_dash = false
+		dash.emit()
 
 
 	var is_climbing = actor.on_ladder and (Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"))

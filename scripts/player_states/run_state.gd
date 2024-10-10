@@ -9,6 +9,7 @@ signal jump
 signal fall
 signal roll
 signal death
+signal dash
 
 var squash_states = [JumpState, FallState, DoubleJumpState]
 
@@ -21,6 +22,7 @@ func _enter(from_state: State = null) -> void:
 	for state in squash_states:
 		if is_instance_of(from_state, state):
 			animator.scale = Vector2(1.3,0.7)
+	actor.can_dash = true
 
 
 func _exit() -> void:
@@ -54,6 +56,10 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("roll") and actor.is_on_floor():
 		roll.emit()
+
+	if Input.is_action_just_pressed("dash") and actor.is_on_floor():
+		actor.dash_timer.start()
+		dash.emit()
 	
 	if not actor.is_alive:
 		death.emit()

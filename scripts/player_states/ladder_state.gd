@@ -14,7 +14,7 @@ func _ready() -> void:
 	set_physics_process(false)
 
 
-func _enter(from_state: State = null) -> void:
+func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
 	animator.play("jump")
 	animator.scale = Vector2(1, 1)
@@ -24,7 +24,7 @@ func _exit() -> void:
 	set_physics_process(false)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	actor.move_and_slide()
 	
 	

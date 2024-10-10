@@ -10,6 +10,7 @@ signal jump
 signal wall_jump
 signal death
 signal ladder
+signal dash
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -59,6 +60,12 @@ func _physics_process(delta: float) -> void:
 			run.emit()
 		else:
 			idle.emit()
+
+
+	if Input.is_action_just_pressed("dash") and actor.can_dash:
+		actor.dash_timer.start()
+		actor.can_dash = false
+		dash.emit()
 
 
 	if PlayerPowers.can_wall_jump or PlayerPowers.temp_can_wall_jump: 

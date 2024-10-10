@@ -16,12 +16,14 @@ extends CharacterBody2D
 @onready var roll_state: RollState = $FiniteStateMachine/RollState
 @onready var death_state: DeathState = $FiniteStateMachine/DeathState
 @onready var ladder_state: LadderState = $FiniteStateMachine/LadderState
+@onready var dash_state: DashState = $FiniteStateMachine/DashState
 
 
 # TIMER
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_buffer_timer: Timer = $JumpBufferTimer
 @onready var wall_jump_timer: Timer = $WallJumpTimer
+@onready var dash_timer: Timer = $DashTimer
 
 
 # OTHER IMPORTS
@@ -34,7 +36,7 @@ extends CharacterBody2D
 # VARIABLES
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 var is_alive: bool = true
-var is_rolling: bool = false
+var facing_direction: int = 1
 
 
 ## Wall jump
@@ -46,6 +48,12 @@ var wall_normal = Vector2.ZERO
 var on_ladder: Area2D = null
 var ladder_count: int = 0
 var is_on_top_of_ladder: bool = false
+
+## Roll
+var is_rolling: bool = false
+
+## Dash
+var can_dash: bool = false 
 
 
 func update_state_label(current_state: State) -> void:
@@ -60,6 +68,7 @@ func _ready() -> void:
 	idle_state.fall.connect(fsm.change_state.bind(fall_state, idle_state))
 	idle_state.roll.connect(fsm.change_state.bind(roll_state, idle_state))
 	idle_state.death.connect(fsm.change_state.bind(death_state, idle_state))
+	idle_state.dash.connect(fsm.change_state.bind(dash_state, idle_state))
 
 
 	# Run State
@@ -68,6 +77,7 @@ func _ready() -> void:
 	run_state.fall.connect(fsm.change_state.bind(fall_state, run_state))
 	run_state.roll.connect(fsm.change_state.bind(roll_state, run_state))
 	run_state.death.connect(fsm.change_state.bind(death_state, run_state))
+	run_state.dash.connect(fsm.change_state.bind(dash_state, run_state))
 
 
 	# Jump State
@@ -77,6 +87,7 @@ func _ready() -> void:
 	jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, jump_state))
 	jump_state.death.connect(fsm.change_state.bind(death_state, jump_state))
 	jump_state.ladder.connect(fsm.change_state.bind(ladder_state, jump_state))
+	jump_state.dash.connect(fsm.change_state.bind(dash_state, jump_state))
 
 
 	# Fall State
@@ -86,6 +97,7 @@ func _ready() -> void:
 	fall_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, fall_state))
 	fall_state.death.connect(fsm.change_state.bind(death_state, fall_state))
 	fall_state.ladder.connect(fsm.change_state.bind(ladder_state, fall_state))
+	fall_state.dash.connect(fsm.change_state.bind(dash_state, fall_state))
 
 
 	# Double Jump State
@@ -94,6 +106,7 @@ func _ready() -> void:
 	double_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, double_jump_state))
 	double_jump_state.death.connect(fsm.change_state.bind(death_state, double_jump_state))
 	double_jump_state.ladder.connect(fsm.change_state.bind(ladder_state, double_jump_state))
+	double_jump_state.dash.connect(fsm.change_state.bind(dash_state, double_jump_state))
 
 
 	# Wall Jump State
@@ -102,6 +115,7 @@ func _ready() -> void:
 	wall_jump_state.wall_jump.connect(fsm.change_state.bind(wall_jump_state, wall_jump_state))
 	wall_jump_state.death.connect(fsm.change_state.bind(death_state, wall_jump_state))
 	wall_jump_state.ladder.connect(fsm.change_state.bind(ladder_state, wall_jump_state))
+	wall_jump_state.dash.connect(fsm.change_state.bind(dash_state, wall_jump_state))
 
 
 	# Roll State
@@ -116,13 +130,18 @@ func _ready() -> void:
 	ladder_state.jump.connect(fsm.change_state.bind(jump_state, ladder_state))
 	ladder_state.death.connect(fsm.change_state.bind(death_state, ladder_state))
 
+
+	# Dash State
+	dash_state.idle.connect(fsm.change_state.bind(idle_state, dash_state))
+	dash_state.run.connect(fsm.change_state.bind(run_state, dash_state))
+	dash_state.fall.connect(fsm.change_state.bind(fall_state, dash_state))
+
+
+
+
+func _process(_delta: float) -> void:
 	update_state_label(fsm.state)
-
-
-
-func _process(delta: float) -> void:
-	update_state_label(fsm.state)
-	#print('JUMP BUFFER ',jump_buffer_timer.time_left)
+	print('JUMP BUFFER ',dash_timer.time_left)
 	pass
 
 
@@ -151,7 +170,6 @@ func apply_friction(input_axis: float, delta: float) -> void:
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
-		
 
 
 func apply_air_resistance(direction, delta: float) -> void:
@@ -168,8 +186,11 @@ func handle_drop() -> void:
 func flip_sprite(direction: float) -> void:
 	if direction > 0:
 		animated_sprite.flip_h = false
+		facing_direction = 1
+		
 	elif direction < 0:
 		animated_sprite.flip_h = true
+		facing_direction = -1
 
 
 func cancel_squash_and_stretch(delta: float) -> void:
