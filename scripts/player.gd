@@ -138,12 +138,10 @@ func _ready() -> void:
 
 
 
-
 func _process(_delta: float) -> void:
-	update_state_label(fsm.state)
+	#update_state_label(fsm.state)
 	print('JUMP BUFFER ',dash_timer.time_left)
 	pass
-
 
 
 func update_animation(animation: String) -> void:

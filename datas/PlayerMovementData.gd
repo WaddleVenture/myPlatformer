@@ -12,4 +12,4 @@ extends Resource
 @export var friction: float = 1500.0
 @export var air_acceleration: float = 400.0
 @export var wall_jump_neutral_speed: float = 50.0
-@export var dash_speed: float = 500
+@export var dash_speed: float = 300
