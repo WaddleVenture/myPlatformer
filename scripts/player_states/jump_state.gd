@@ -73,7 +73,10 @@ func _physics_process(delta: float) -> void:
 
 
 	if Input.is_action_just_pressed("dash") and actor.can_dash:
+		var input_x := Input.get_axis("move_left", "move_right")
+		var input_y := Input.get_axis("move_up", "move_down")
 		actor.dash_timer.start()
+		actor.detect_dash_direction(input_x, input_y)
 		actor.can_dash = false
 		dash.emit()
 

@@ -16,20 +16,21 @@ func _ready() -> void:
 
 func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
-	animator.play("idle")
+	animator.scale = Vector2(1, 1)
 
 
 func _exit() -> void:
 	set_physics_process(false)
-	actor.velocity.x = actor.facing_direction * actor.movement_data.speed
+	actor.velocity = actor.dash_direction * actor.movement_data.speed
 
 
 func _physics_process(_delta: float) -> void:
 	actor.move_and_slide()
 
 
-	actor.velocity.x = actor.facing_direction * actor.movement_data.dash_speed
-	actor.velocity.y = 0  
+	#actor.velocity.x = actor.facing_direction * actor.movement_data.dash_speed
+	#actor.velocity.y = 0  
+	actor.velocity = actor.dash_direction * actor.movement_data.dash_speed
 
 
 	# CHANGING STATES

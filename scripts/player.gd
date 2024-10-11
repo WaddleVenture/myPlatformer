@@ -54,6 +54,7 @@ var is_rolling: bool = false
 
 ## Dash
 var can_dash: bool = false 
+var dash_direction: Vector2 = Vector2.ZERO
 
 
 func update_state_label(current_state: State) -> void:
@@ -139,8 +140,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	#update_state_label(fsm.state)
-	print('JUMP BUFFER ',dash_timer.time_left)
+	update_state_label(fsm.state)
+	#print('JUMP BUFFER ',dash_timer.time_left)
 	pass
 
 
@@ -229,3 +230,10 @@ func apply_ladder_movement(input_axis: float) -> void:
 		velocity.x = input_axis * movement_data.speed / 3
 	else:
 		velocity.x = move_toward(velocity.x, 0, movement_data.speed / 3)
+
+
+func detect_dash_direction(input_x, input_y) -> void:
+	if input_x == 0 and input_y == 0:
+		dash_direction = Vector2(facing_direction, 0)
+	else:
+		dash_direction = Vector2(input_x, input_y).normalized()
