@@ -17,6 +17,7 @@ func _ready() -> void:
 func _enter(_from_state: State = null) -> void:
 	set_physics_process(true)
 	animator.scale = Vector2(1, 1)
+	actor.collision_shape_2d.disabled = false
 
 
 func _exit() -> void:
@@ -28,8 +29,6 @@ func _physics_process(_delta: float) -> void:
 	actor.move_and_slide()
 
 
-	#actor.velocity.x = actor.facing_direction * actor.movement_data.dash_speed
-	#actor.velocity.y = 0  
 	actor.velocity = actor.dash_direction * actor.movement_data.dash_speed
 
 

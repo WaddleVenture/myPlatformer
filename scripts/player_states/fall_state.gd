@@ -62,7 +62,7 @@ func _physics_process(delta: float) -> void:
 			idle.emit()
 
 
-	if Input.is_action_just_pressed("dash") and actor.can_dash and not actor.platform_raycast.is_colliding():
+	if Input.is_action_just_pressed("dash") and actor.can_dash:
 		var input_x := Input.get_axis("move_left", "move_right")
 		var input_y := Input.get_axis("move_up", "move_down")
 		actor.dash_timer.start()
