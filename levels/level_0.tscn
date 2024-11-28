@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=4 uid="uid://bo2lvyjwq7aoe"]
+[gd_scene load_steps=21 format=4 uid="uid://bo2lvyjwq7aoe"]
 
 [ext_resource type="Script" path="res://scripts/level_manager.gd" id="1_k0q67"]
 [ext_resource type="PackedScene" uid="uid://cq0gonfovkxk5" path="res://scenes/player.tscn" id="1_o6fjh"]
+[ext_resource type="PackedScene" uid="uid://bur2o10qo4u5r" path="res://scenes/input_settings/input_settings.tscn" id="1_s7jhu"]
 [ext_resource type="FontFile" uid="uid://d3jq5low7qf5j" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_8il07"]
 [ext_resource type="Texture2D" uid="uid://cvd2sy136du8s" path="res://assets/sprites/world_tileset.png" id="2_mrd5c"]
 [ext_resource type="PackedScene" uid="uid://ddyde7mjpubp2" path="res://scenes/killzone.tscn" id="3_ynnvd"]
@@ -232,6 +233,11 @@ _data = {
 }
 
 [node name="Level0" type="Node2D"]
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="InputSettings" parent="GUI" instance=ExtResource("1_s7jhu")]
+visible = false
 
 [node name="LevelManager" type="Node" parent="."]
 unique_name_in_owner = true

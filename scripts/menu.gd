@@ -12,9 +12,11 @@ func _ready() -> void:
 func _on_start_button_pressed() -> void:
 	PlayerPowers.reset_powers()
 	SaveManager.reset_save()
-	await LevelTransition.fade_to_black()
+	#TODO : There is a problem here with the level transitions, the code with pause don't work
+	#await LevelTransition.fade_to_black()
 	get_tree().change_scene_to_file("res://levels/level_0.tscn")
-	await LevelTransition.fade_from_black()
+	#await LevelTransition.fade_from_black()
+
 
 
 func _on_quit_button_pressed() -> void:
